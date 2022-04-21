@@ -5,6 +5,10 @@ import pandas as pd
 import sys
 import os
 
+from src.utils.utils import *
+from src.utils.chinese import * 
+
+
 
 class CombinedGroups():
 
@@ -13,6 +17,7 @@ class CombinedGroups():
         
 
 def read_csv(fileName):
+    
     df = pd.read_csv(fileName)
 
     def tryGetValue(x, func, default):
@@ -26,6 +31,7 @@ def read_csv(fileName):
     df['订购数量'] = df['套餐数量'].apply(lambda x: tryGetValue(x, lambda y: int(y), 0))
     
     for i, ask in df.iterrows():
+        #replace_location(ask['收货地址'])
         if ask['楼栋号'] == ask['门牌号'] or ask['门牌号'] == 0 or (ask['楼栋号'] <= 36 and ask['楼栋号'] >= 7):
             df.loc[i, '门牌号'] = df.loc[i, '楼栋号']
             df.loc[i, '楼栋号'] = 500
@@ -33,6 +39,33 @@ def read_csv(fileName):
     groups = df.groupby('楼栋号')
     
     return groups
+
+
+def read_excel(fileName):
+    
+    df = pd.read_excel(fileName)
+
+    def tryGetValue(x, func, default):
+        try:
+            return func(x)
+        except:
+            return default
+    
+    keywords = ['上海市', '上海', '闵行区', '闵行', '紫龙路', '500号', '五百号', '500']
+    df['楼栋号'] = df['收货地址'].apply(lambda x: tryGetValue(x, lambda y: replace_location(y, keywords)[0], 0))
+    df['门牌号'] = df['收货地址'].apply(lambda x: tryGetValue(x, lambda y: replace_location(y, keywords)[1], 0))
+    df['订购数量'] = df['套餐数量'].apply(lambda x: tryGetValue(x, lambda y: int(y), 0))
+    
+    for i, ask in df.iterrows():
+        #replace_location(ask['收货地址'])
+        if ask['楼栋号'] == ask['门牌号'] or ask['门牌号'] == 0 or (ask['楼栋号'] <= 36 and ask['楼栋号'] >= 7):
+            df.loc[i, '门牌号'] = df.loc[i, '楼栋号']
+            df.loc[i, '楼栋号'] = 500
+
+    groups = df.groupby('楼栋号')
+    
+    return groups
+        
         
 
 def combineGroups(groups):
@@ -64,12 +97,13 @@ def generate_latex(groups, folder, title):
             buildingNum = '居委会'
 
         with doc.create(Section(buildingNum + '， 共' + str(int(sum(group['订购数量']))) + '单', False)):
-            with doc.create(Tabular('|c|c|c|c|c|c|c|')) as table:
+            with doc.create(Tabular('|c|c|c|c|c|c|')) as table:
                 table.add_hline()
-                table.add_row(('需求概述', '业主姓名', '订单金额', '楼栋号', '门牌号', '套餐数量', '配送完成'))
+                table.add_row(('需求概述', '业主姓名', '楼栋号', '门牌号', '套餐数量', '配送完成'))
                 table.add_hline()
                 asks = []
                 for _, ask in group.iterrows():
+                    print(ask['收货地址'], ask['楼栋号'], ask['门牌号'])
                     asks.append(ask)
 
                 asks.sort(key=lambda ask: ask['门牌号'])
@@ -77,8 +111,7 @@ def generate_latex(groups, folder, title):
                     table.add_row((
                             #ask['需求概述'] if name != 500 else buildingNum + str(int(ask['门牌号'])) + '号', 
                             buildingNum + str(int(ask['门牌号'])) + '号：' + title, 
-                            ask['业主姓名'], 
-                            ask['订单金额'],
+                            ask['业主姓名'] if ask.__contains__('业主姓名') else ask['收货人'], 
                             buildingNum,
                             str(int(ask['门牌号'])) if ask['门牌号'] != 0 else str(int(ask['楼栋号'])),
                             ask['套餐数量'],
@@ -95,10 +128,14 @@ def generate_latex(groups, folder, title):
     print(title, '-', c)
 
 def main():
-    generate_latex()
+    files = find_all_files('files', ['.csv', '.xlsx'])
+    for f in files:
+        p = os.path.splitext(f[1])[0]
+        if f[1].endswith('.csv'):
+            groups = read_csv(os.path.join(f[0], f[1]))
+        else:
+            groups = read_excel(os.path.join(f[0], f[1]))
+        generate_latex(groups, 'outputfiles', p)
 
-#pairs = [('files\\0416萃阳楼肉品.csv', '居委团购-萃阳楼肉品'), ('files\\0416防疫.csv', '居委团购-防疫'), ('files\\0416水产.csv', '居委团购-水产'), ('files\\0416水果.csv', '居委团购-水果')]
-pairs = [('files\\0418小番茄.csv', '0418小番茄'), ('files\\0418蔬菜.csv', '0418蔬菜')]
-for p in pairs:
-    groups = read_csv(p[0])
-    generate_latex(groups, 'outputfiles', p[1])
+if __name__ == '__main__':
+    main()
