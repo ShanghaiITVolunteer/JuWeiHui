@@ -103,7 +103,6 @@ def generate_latex(groups, folder, title):
                 table.add_hline()
                 asks = []
                 for _, ask in group.iterrows():
-                    print(ask['收货地址'], ask['楼栋号'], ask['门牌号'])
                     asks.append(ask)
 
                 asks.sort(key=lambda ask: ask['门牌号'])
