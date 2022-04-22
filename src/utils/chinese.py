@@ -36,7 +36,6 @@ def replace_location(location, community_keywords = []):
     for keyword in community_keywords:
         location = location.replace(keyword, '')
 
-    print(location)
     result = re.findall(f'([{CHINESE_NUMBERS_UTF_8}]+|[0-9]+)', location)
 
     for index, rst in enumerate(result):
@@ -44,5 +43,7 @@ def replace_location(location, community_keywords = []):
             result[index] = forward_cn2int(rst)
         result[index] = int(result[index])
 
-    print(result, location)
     return result
+
+
+# Community Consts
