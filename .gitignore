@@ -1,5 +1,6 @@
 files/*
-outputfiles/*
+outputs/*
+dataset/*
 *.pyc
 .idea
 venv

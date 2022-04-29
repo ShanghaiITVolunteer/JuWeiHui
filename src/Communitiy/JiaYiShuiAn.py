@@ -15,7 +15,7 @@ class JiaYiShuiAn(CommunityBase):
         self.SPECIAL_NUMBERS_HOUSE = {
             5899: '商务楼'
         }
-        for i in range(7, 37):
+        for i in range(6, 37):
             self.SPECIAL_NUMBERS_HOUSE[i] = '别墅区'
 
     def parse_address(self, address):
@@ -34,6 +34,8 @@ class JiaYiShuiAn(CommunityBase):
             if self.SPECIAL_NUMBERS_HOUSE.__contains__(locations[0]):
                 return CommunityAddress(f'{self.SPECIAL_NUMBERS_HOUSE[locations[0]]}{locations[0]}号',
                                         self.SPECIAL_NUMBERS_HOUSE[locations[0]])
+            if address.__contains__('商务楼'):
+                return CommunityAddress(f'商务楼{locations[0]}', '商务楼')
             if address.__contains__('居委会'):
                 return CommunityAddress('居委会', '居委会')
         raise ValueError

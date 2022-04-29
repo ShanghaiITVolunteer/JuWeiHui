@@ -3,7 +3,7 @@ from pathlib import Path
 from .Order import Order
 from .ExcelParser import ExcelParser
 
-
+# 群接龙
 class ExcelParser1(ExcelParser):
     """
     Excel模板，第一行：收货人 联系电话 订单总金额 支付状态 收货地址 订购数量
