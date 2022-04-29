@@ -11,7 +11,7 @@ if __name__ == '__main__':
     excel_parser = ExcelParser1
     # 2. 指定输入和输出文件名。输入和输出文件名应和需求名有关，输入模板和输出模板会依赖这个。TODO: 其实我觉得不应该依赖，下一步要确认下这个逻辑
     for file in find_all_files("..\\files", ["xlsx"]):
-        excel_parser = ExcelParser1 if "鸡蛋" not in file[1] else ExcelParser2
+        excel_parser = ExcelParser1 if ("鸡蛋" not in file[1]) and ("清美" not in file[1]) else ExcelParser2
         input_filename = file[0] + '\\' + file[1]
         product_name = Path(input_filename).stem
         output_filename = f'..\\outputs\\{product_name}.pdf'
