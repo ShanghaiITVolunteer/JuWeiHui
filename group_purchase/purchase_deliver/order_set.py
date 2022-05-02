@@ -15,11 +15,7 @@ def order_set_to_html(orders, title):
     ret = ''
     groups = group_orders_by_address(orders)
     orders = 0
-<<<<<<< HEAD:src/PurchaseDeliver/OrderSet.py
-    for group in sorted(groups):  # TODO: 改进排序算法，支持数字和非数字混合排序，不要用字典序\
-=======
     for group in sorted(groups):  # TODO: 改进排序算法，支持数字和非数字混合排序，不要用字典序
->>>>>>> 3696f59 (重构):src/purchase_deliver/order_set.py
         orders += int(sum(sum(i.items.values()) for i in groups[group]))
         ret += f'''<div class='no-break'>
         <h2>{group}, 共{int(sum(sum(i.items.values()) for i in groups[group]))}单  {title}</h2>
