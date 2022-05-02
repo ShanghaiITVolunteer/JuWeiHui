@@ -1,5 +1,5 @@
 from .community_base import CommunityBase, CommunityAddress
-from utils.chinese import replace_location
+from group_purchase.utils.chinese import replace_location
 
 
 class JiaYiShuiAn(CommunityBase):

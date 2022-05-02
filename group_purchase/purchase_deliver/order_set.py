@@ -1,7 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 
-from utils.pdf_gen import html_string_to_pdf
+from group_purchase.utils.pdf_gen import html_string_to_pdf
 
 
 def group_orders_by_address(orders):

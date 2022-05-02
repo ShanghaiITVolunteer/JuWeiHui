@@ -4,3 +4,8 @@ dataset/*
 *.pyc
 .idea
 venv
+
+# package build
+build/*
+dist/*
+group_purchase.egg-info/*

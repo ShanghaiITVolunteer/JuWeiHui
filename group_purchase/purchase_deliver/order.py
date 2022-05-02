@@ -1,6 +1,6 @@
 from typing import *
 from collections import defaultdict
-from community.community_base import CommunityAddress
+from group_purchase.community.community_base import CommunityAddress
 
 
 class Order:

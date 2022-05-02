@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from purchase_deliver.order import Order
+from group_purchase.purchase_deliver.order import Order
 from .excel_parser import ExcelParserBase
 
 

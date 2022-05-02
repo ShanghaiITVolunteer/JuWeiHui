@@ -1,6 +1,6 @@
 import openpyxl
 
-from purchase_deliver.order_set import OrderSet
+from group_purchase.purchase_deliver.order_set import OrderSet
 
 
 class ExcelParserBase:
