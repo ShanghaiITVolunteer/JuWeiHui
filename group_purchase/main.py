@@ -16,7 +16,6 @@ if __name__ == '__main__':
         print(output_filename)
         # 3. 调用接口处理excel
         # 3.1 创建parser实例，一个parser对应一个excel文件
-        print(excel_parser)
         parser = excel_parser(open(input_filename, 'rb'))
         # 3.2 调用parser解析接口，返回订单集合对象和出错单元格坐标
         result, errors = parser.parse_for_community(community)
