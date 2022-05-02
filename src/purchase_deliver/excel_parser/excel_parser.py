@@ -1,9 +1,9 @@
 import openpyxl
 
-from .OrderSet import OrderSet
+from purchase_deliver.order_set import OrderSet
 
 
-class ExcelParser:
+class ExcelParserBase:
     """
     Excel模板Base类。
     """

@@ -1,10 +1,11 @@
 from pathlib import Path
 
-from .Order import Order
-from .ExcelParser import ExcelParser
+from purchase_deliver.order import Order
+from .excel_parser import ExcelParserBase
+
 
 # 群接龙
-class ExcelParser1(ExcelParser):
+class JieLongParser(ExcelParserBase):
     """
     Excel模板，第一行：收货人 联系电话 订单总金额 支付状态 收货地址 订购数量
     后起每行一条记录，最后一行是合计
