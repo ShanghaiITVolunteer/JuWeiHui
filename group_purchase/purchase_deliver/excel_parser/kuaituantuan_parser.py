@@ -1,11 +1,12 @@
 from audioop import add
 from pathlib import Path
 
-from .Order import Order
-from .ExcelParser import ExcelParser
+from group_purchase.purchase_deliver.order import Order
+from .excel_parser import ExcelParserBase
+
 
 # 快团团
-class ExcelParser2(ExcelParser):
+class KuaiTuanTuanParser(ExcelParserBase):
     """
     Excel模板，第一行：
     下单人 团员备注 团长备注 跟团号 商品 规格 数量 商品金额 
@@ -15,11 +16,16 @@ class ExcelParser2(ExcelParser):
     商品名和excel文件名保持一致
     """
 
+    def __init__(self, file):
+        super().__init__(file)
+        self.amount_col = None
+        self.full_address_col = None
+
     def get_header(self):
         for i in range(self.sheet.max_column):
-            if self.sheet.cell(1, i+1).value == "详细地址":
+            if self.sheet.cell(1, i + 1).value == "详细地址":
                 self.full_address_col = i
-            if self.sheet.cell(1, i+1).value == "数量":
+            if self.sheet.cell(1, i + 1).value == "数量":
                 self.amount_col = i
 
     def loop_record(self):

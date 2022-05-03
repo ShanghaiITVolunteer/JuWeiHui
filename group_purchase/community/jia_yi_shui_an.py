@@ -1,5 +1,5 @@
-from .CommunityBase import CommunityBase, CommunityAddress
-from utils.chinese import replace_location
+from .community_base import CommunityBase, CommunityAddress
+from group_purchase.utils.chinese import replace_location
 
 
 class JiaYiShuiAn(CommunityBase):
@@ -23,13 +23,20 @@ class JiaYiShuiAn(CommunityBase):
 
         if len(locations) == 2:
             if address.__contains__('5899'):
+<<<<<<< HEAD:src/Communitiy/JiaYiShuiAn.py
                 locations.remove(5899) 
+=======
+                locations.remove(5899)
+>>>>>>> 3696f59 (重构):src/community/jia_yi_shui_an.py
                 return CommunityAddress(f'商务楼{locations[0]}',
                                         '商务楼',
                                         int(locations[0]))
             return CommunityAddress(f'{locations[0]}号楼{locations[1]}号', f'{locations[0]}号楼', int(locations[1]))
         if len(locations) == 1:
+<<<<<<< HEAD:src/Communitiy/JiaYiShuiAn.py
 
+=======
+>>>>>>> 3696f59 (重构):src/community/jia_yi_shui_an.py
             if self.SPECIAL_NUMBERS_HOUSE.__contains__(locations[0]):
                 return CommunityAddress(f'{self.SPECIAL_NUMBERS_HOUSE[locations[0]]}{locations[0]}号',
                                         self.SPECIAL_NUMBERS_HOUSE[locations[0]],

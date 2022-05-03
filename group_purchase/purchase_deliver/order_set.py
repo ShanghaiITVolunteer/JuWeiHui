@@ -1,7 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 
-from utils.PdfGen import html_string_to_pdf
+from group_purchase.utils.pdf_gen import html_string_to_pdf
 
 
 def group_orders_by_address(orders):
@@ -15,7 +15,7 @@ def order_set_to_html(orders, title):
     ret = ''
     groups = group_orders_by_address(orders)
     orders = 0
-    for group in sorted(groups):  # TODO: 改进排序算法，支持数字和非数字混合排序，不要用字典序\
+    for group in sorted(groups):  # TODO: 改进排序算法，支持数字和非数字混合排序，不要用字典序
         orders += int(sum(sum(i.items.values()) for i in groups[group]))
         ret += f'''<div class='no-break'>
         <h2>{group}, 共{int(sum(sum(i.items.values()) for i in groups[group]))}单  {title}</h2>
