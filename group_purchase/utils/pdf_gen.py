@@ -5,7 +5,7 @@ import os
 def html_string_to_pdf(html, filename):
     file = os.path.abspath(__file__)
     src_directory = os.path.join(os.path.pardir, os.path.dirname(file))
-    css_file = os.path.join(src_directory, "asserts", "html_format.css")
+    css_file = os.path.join(src_directory, "assets", "html_format.css")
 
     pdfkit.from_string(html, filename, options={
         'encoding': 'utf-8',
