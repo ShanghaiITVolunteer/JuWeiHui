@@ -12,6 +12,11 @@ class ExcelParserBase:
         self.file = file
         self.sheet = openpyxl.load_workbook(self.file).active
 
+        self.amount_col = None
+        self.full_address_col = None
+        self.area_col = None
+
+
     def parse_for_community(self, community):
         order_set = OrderSet()
         error_cells = []

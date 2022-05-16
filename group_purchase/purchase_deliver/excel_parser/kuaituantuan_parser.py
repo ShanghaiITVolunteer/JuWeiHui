@@ -18,8 +18,6 @@ class KuaiTuanTuanParser(ExcelParserBase):
 
     def __init__(self, file):
         super().__init__(file)
-        self.amount_col = None
-        self.full_address_col = None
 
     def get_header(self):
         for i in range(self.sheet.max_column):
@@ -27,6 +25,8 @@ class KuaiTuanTuanParser(ExcelParserBase):
                 self.full_address_col = i
             if self.sheet.cell(1, i + 1).value == "数量":
                 self.amount_col = i
+            if str(self.sheet.cell(1, i + 1).value).__contains__('弄号'):
+                self.area_col = i
 
     def loop_record(self):
         for r in self.sheet.iter_rows(min_row=2, max_row=self.sheet.max_row):
@@ -34,9 +34,13 @@ class KuaiTuanTuanParser(ExcelParserBase):
 
     def record_to_order(self, record, community):
         try:
+            address = community.parse_address(record[self.full_address_col].value)
+            if community.has_area:
+                address.area = community.parse_area(record[self.area_col].value)
+
             return (Order()
                     .set_buyer(record[0].value)
-                    .set_address(community.parse_address(record[self.full_address_col].value))
+                    .set_address(address)
                     .set_item(Path(self.file.name).stem, record[self.amount_col].value))
         except ValueError:
             raise ValueError(f'{record[self.full_address_col].coordinate}')
