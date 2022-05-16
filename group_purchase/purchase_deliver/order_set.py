@@ -4,19 +4,22 @@ from pathlib import Path
 from group_purchase.utils.pdf_gen import html_string_to_pdf
 
 
-def group_orders_by_address(orders):
+def group_orders_by_address(orders, has_area):
     ret = defaultdict(list)
     for i in orders:
-        ret[i.address.building].append(i)
+        if has_area:
+            ret[str(i.address.area) + ' ' + str(i.address.building)].append(i)
+        else:
+            ret[i.address.building].append(i)
     return ret
 
 
-def order_set_to_html(orders, title):
+def order_set_to_html(orders, title, has_area):
     ret = ''
-    groups = group_orders_by_address(orders)
-    orders = 0
+    groups = group_orders_by_address(orders, has_area)
+    num_orders = 0
     for group in sorted(groups):  # TODO: 改进排序算法，支持数字和非数字混合排序，不要用字典序
-        orders += int(sum(sum(i.items.values()) for i in groups[group]))
+        num_orders += int(sum(sum(i.items.values()) for i in groups[group]))
         ret += f'''<div class='no-break'>
         <h2>{group}, 共{int(sum(sum(i.items.values()) for i in groups[group]))}单  {title}</h2>
         <table>
@@ -29,7 +32,17 @@ def order_set_to_html(orders, title):
             for order in sorted(groups[group], key=lambda x: x.address.room))}
         </table>
         </div>'''
-    print(f'{title} - {orders}')
+    print(f'{title} - {num_orders}')
+
+    if (has_area):
+        ret += '<tr><tr>'
+        counter = defaultdict(list)
+        for i in orders:
+            counter[i.address.area].append(i)
+
+        for area in counter:
+            ret += f'<h1>{area} - {int(sum(sum(i.items.values()) for i in counter[area]))}</h1>'
+            
     return ret
 
 
@@ -40,6 +53,6 @@ class OrderSet:
     def add_order(self, order):
         self.orders.append(order)
 
-    def print_to_pdf(self, filename):
-        r = order_set_to_html(self.orders, Path(filename).stem)
+    def print_to_pdf(self, filename, has_area):
+        r = order_set_to_html(self.orders, Path(filename).stem, has_area)
         html_string_to_pdf(r, filename)

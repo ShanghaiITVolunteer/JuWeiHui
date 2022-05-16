@@ -3,9 +3,11 @@ from group_purchase.utils.chinese import replace_location
 
 
 class JiaYiShuiAn(CommunityBase):
+
     def __init__(self):
         super().__init__('嘉怡水岸')
         self.keywords = ['上海市', '上海', '闵行区', '闵行', '紫龙路', '500号', '五百号', '500']
+        self.has_area = False
 
         # In JiaYiShuiAn, number 7 -36 are houses, with no room number
         self.SPECIAL_NUMBERS_HOUSE = {

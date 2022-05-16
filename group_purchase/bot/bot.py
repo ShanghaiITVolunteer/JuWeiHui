@@ -6,16 +6,16 @@ import openpyxl
 
 def on_file(input_file_path, output_file_path, community, excel):
     excel_parser = get_excel_parser(excel)
-    community_parser = get_community_parser(community)
+    community_parser = get_community_parser(community)()
 
     parser = excel_parser(open(input_file_path, 'rb'))
-    result, errors = parser.parse_for_community(community_parser())
+    result, errors = parser.parse_for_community(community_parser)
     if errors:
         return False, f"以下单元格数据无法识别，请检查:\n{errors}"
     else:
         pass
 
-    result.print_to_pdf(output_file_path)
+    result.print_to_pdf(output_file_path, community_parser.has_area)
     return True, output_file_path
 
 
